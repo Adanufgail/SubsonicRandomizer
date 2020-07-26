@@ -6,7 +6,9 @@ import json
 import requests
 
 f = open("creds", "r")
+u=f.readline().rstrip()
 password=f.readline().rstrip()
+site=f.readline().rstrip()
 
 def get_random_alphanumeric_string(length):
     letters_and_digits = string.ascii_letters + string.digits
@@ -24,8 +26,7 @@ t=hashlib.md5(tohash).hexdigest()
 #response = requests.get("http://api.open-notify.org/iss-now.json")
 #print(response.json()['iss_position'])
 
-BASE="https://subsonic.hildetieoloramar.com/rest/"
-u="adanufgail"
+BASE=site+"/rest/"
 v="1.16.1"
 c="randomplaylist"
 randplay=23
