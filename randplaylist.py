@@ -4,12 +4,21 @@ import random
 import string
 import json
 import requests
+import os
 import sys
-
 
 #creds should have 3 things in order on a line by themselves:
 #username, password, site URL without trailing /
-f = open("creds", "r")
+CRED=""
+if not os.path.exists("./creds"):
+	if not os.path.exists(os.getenv("HOME")+"/.creds"):
+		sys.exit("No credentials file exists")
+	else:
+		CRED=os.getenv("HOME")+"/.creds"
+else:
+	CRED="./creds"
+		
+f = open(CRED, "r")
 u=f.readline().rstrip()
 password=f.readline().rstrip()
 site=f.readline().rstrip()
