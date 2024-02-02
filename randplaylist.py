@@ -24,21 +24,21 @@ password=f.readline().rstrip()
 site=f.readline().rstrip()
 
 def get_random_alphanumeric_string(length):
-    letters_and_digits = string.ascii_letters + string.digits
-    result_str = ''.join((random.choice(letters_and_digits) for i in range(length)))
-    return result_str
+	letters_and_digits = string.ascii_letters + string.digits
+	result_str = ''.join((random.choice(letters_and_digits) for i in range(length)))
+	return result_str
 
 s=get_random_alphanumeric_string(12)
 
 tohash=password+s
-t=hashlib.md5(tohash).hexdigest()
+t=hashlib.md5(str(tohash).encode('utf-8')).hexdigest()
 
 BASE=site+"/rest/"
 #v="1.16.1" SUBSONIC
 v="1.15.0" #AIRSONIC
 c="randomplaylist"
 randplay=0
-musicfolder=0
+musicfolder=3
 X=0
 
 print("Emptying Playlist")
@@ -49,7 +49,7 @@ while requests.get(BASE+"getPlaylist"+"?u="+u+"&f=json&v="+v+"&c="+c+"&t="+t+"&s
 	sys.stdout.write('\r'+str(totalz)+" remain")
 	sys.stdout.flush()
 
-ADD=200
+ADD=2000
 FIRST=1
 Z=0
 
@@ -59,7 +59,7 @@ while Z < ADD:
 	sys.stdout.flush()
 	for X in requests.get(BASE+"getRandomSongs"+"?u="+u+"&f=json&v="+v+"&c="+c+"&t="+t+"&s="+s+"&size="+str(1)+"&musicFolderId="+str(musicfolder)).json()['subsonic-response']['randomSongs']['song']:
 		song=requests.get(BASE+"getSong"+"?u="+u+"&f=json&v="+v+"&c="+c+"&t="+t+"&s="+s+"&id="+str(X['id'])+"").json()['subsonic-response']['song']
-        	rating=song.get('averageRating',3.0)
+		rating=song.get('averageRating',3.0)
 		starred=song.get('starred',0)
 		if float(rating) > 2.0:
 			if str(starred) == '0':
@@ -68,3 +68,4 @@ while Z < ADD:
 				if FIRST == 1:
 					FIRST=0
 					result=requests.get(BASE+"updatePlaylist"+"?u="+u+"&f=json&v="+v+"&c="+c+"&t="+t+"&s="+s+"&playlistId="+str(randplay)+"&songIndexToRemove=0").json()
+
